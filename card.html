@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEO Eui-Seok Hong - JNE Works</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    
+    <style>
+        /* 브로셔와 통일감 있는 짙은 배경 */
+        body { 
+            background-color: #525659; 
+            margin: 0; 
+            padding: 0; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+        }
+        
+        /* 1. 상단 헤더 */
+        .header {
+            width: 100%;
+            background: #222;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .title { font-size: 18px; font-weight: 800; margin-bottom: 4px; }
+        .subtitle { font-size: 13px; color: #bbb; font-weight: 400; }
+
+        /* 2. 명함 이미지가 보일 영역 */
+        #pdf-container {
+            width: 100%;
+            max-width: 600px; /* 명함이라 너무 크지 않게 */
+            padding: 40px 0 100px 0; /* 버튼 가림 방지 여백 */
+            display: flex;
+            justify-content: center;
+        }
+        
+        canvas {
+            display: block;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* 명함이 떠있는 듯한 그림자 */
+            border-radius: 8px; /* 명함 모서리 둥글게 */
+        }
+
+        /* 3. 둥둥 떠있는 [연락처 저장] 버튼 */
+        .fab-save {
+            position: fixed;
+            bottom: 30px;
+            right: 20px;
+            background-color: #007bff; /* JNE 파란색 */
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.4);
+            z-index: 999;
+            font-size: 16px; 
+            font-weight: 800;
+            border: none;
+            cursor: pointer;
+            gap: 8px;
+            transition: transform 0.2s;
+        }
+        .fab-save:active { transform: scale(0.95); background-color: #0056b3; }
+        
+        .loading { color: white; margin-top: 50px; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="title">CEO Eui-Seok Hong</div>
+        <div class="subtitle">JNE Works @ CES 2026</div>
+    </div>
+
+    <div id="pdf-container">
+        <div class="loading">Loading Digital Card...</div>
+    </div>
+
+    <button onclick="downloadVCard()" class="fab-save">
+        <span>👤</span> Save Contact
+    </button>
+
+    <script>
+        // ✅ 1. 업로드한 명함 PDF 파일명 (정확히 입력!)
+        const url = './ceo_card.pdf';
+
+        // --- (1) PDF 렌더링 로직 (브로셔와 동일) ---
+        const pdfjsLib = window['pdfjs-dist/build/pdf'];
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+        const container = document.getElementById('pdf-container');
+
+        pdfjsLib.getDocument(url).promise.then(pdf => {
+            container.innerHTML = ''; 
+            // 명함은 보통 1페이지니까 첫 페이지만 가져옴
+            pdf.getPage(1).then(page => {
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                container.appendChild(canvas);
+
+                // 고화질 렌더링
+                const viewport = page.getViewport({ scale: 2.0 });
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                
+                // 화면 크기에 맞게 리사이징 (명함 비율 유지)
+                canvas.style.width = "90%"; 
+                canvas.style.height = "auto";
+
+                page.render({ canvasContext: context, viewport: viewport });
+            });
+        }).catch(error => {
+            console.error('Error:', error);
+            container.innerHTML = '<p style="color:white; padding:20px;">Failed to load card image.</p>';
+        });
+
+        // --- (2) 연락처 저장 로직 (vCard 생성) ---
+        function downloadVCard() {
+            // 홍의석 대표님 정보 입력
+            const vCardData = {
+                firstName: "Eui-Seok", lastName: "Hong",
+                org: "JNE Works", title: "CEO",
+                email: "eshong@jneworks.com",
+                mobile: "+82-10-5218-8661",
+                work: "+82-70-7788-8661",
+                url: "https://www.jneworks.com",
+                address: "606, A-dong, D-TECH TOWER, 33, Gwacheon-daero 7-gil, Gwacheon-si, Gyeonggi-do, Rep. of Korea"
+            };
+
+            const vCard = `BEGIN:VCARD
+VERSION:3.0
+N:${vCardData.lastName};${vCardData.firstName};;;
+FN:${vCardData.firstName} ${vCardData.lastName}
+ORG:${vCardData.org}
+TITLE:${vCardData.title}
+EMAIL;type=INTERNET;type=WORK:${vCardData.email}
+TEL;type=CELL:${vCardData.mobile}
+TEL;type=WORK:${vCardData.work}
+URL:${vCardData.url}
+ADR;type=WORK:;;${vCardData.address}
+END:VCARD`;
+
+            const blob = new Blob([vCard], { type: "text/vcard;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "CEO_Eui-Seok_Hong.vcf";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    </script>
+</body>
+</html>
