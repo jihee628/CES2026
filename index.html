@@ -1,26 +1,42 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CES 2026 Brochure</title>
+    <title>JNE Works - Simvis</title>
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 50px 20px; background-color: #f4f4f4; }
-        .container { background: white; padding: 40px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); max-width: 400px; margin: 0 auto; }
-        h1 { color: #333; margin-bottom: 30px; }
-        .btn { display: block; width: 100%; padding: 15px 0; margin: 10px 0; border-radius: 8px; text-decoration: none; font-weight: bold; font-size: 18px; }
-        .btn-view { background-color: #007bff; color: white; } /* 파란색 버튼 */
-        .btn-down { background-color: #6c757d; color: white; } /* 회색 버튼 */
+        /* 모바일 친화적이고 깔끔한 디자인 스타일 */
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; text-align: center; padding: 40px 20px; background-color: #f8f9fa; color: #333; }
+        .container { background: white; padding: 40px 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 400px; margin: 0 auto; }
+        
+        /* 타이포그래피 설정 */
+        h1 { margin: 0 0 10px 0; font-size: 28px; font-weight: 800; color: #212529; letter-spacing: -0.5px; }
+        h2 { margin: 0 0 30px 0; font-size: 20px; font-weight: 600; color: #0056b3; } /* 제품명 강조색 */
+        p { margin-bottom: 30px; color: #6c757d; font-size: 16px; line-height: 1.5; }
+        
+        /* 버튼 스타일 설정 */
+        .btn { display: block; width: 100%; padding: 16px 0; margin: 12px 0; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 18px; transition: opacity 0.2s; }
+        .btn:active { opacity: 0.8; }
+        .btn-view { background-color: #007bff; color: white; box-shadow: 0 4px 6px rgba(0,123,255,0.3); } /* 파란색 (메인) */
+        .btn-down { background-color: #e9ecef; color: #495057; } /* 회색 (서브) */
+        
+        /* 하단 카피라이트 */
+        .footer { margin-top: 30px; font-size: 12px; color: #adb5bd; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>JNE Works @ CES 2026</h1>
-        <p>Simvis™ Official Brochure</p>
+        <h1>JNE Works</h1>
         
-        <a href="./JNEworks_Simvis.pdf" class="btn btn-view">📄 View PDF</a>
+        <h2>Simvis™ Brochure</h2>
+        
+        <p>Welcome to CES 2026!<br>Select an option below:</p>
+        
+        <a href="https://docs.google.com/viewer?url=https://jihee628.github.io/CES2026/JNEworks_Simvis.pdf" class="btn btn-view" target="_blank">📄 View PDF</a>
         
         <a href="./JNEworks_Simvis.pdf" download class="btn btn-down">⬇️ Download</a>
+        
+        <div class="footer">© 2026 JNE Works. All rights reserved.</div>
     </div>
 </body>
 </html>
